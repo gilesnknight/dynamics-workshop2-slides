@@ -1,0 +1,1187 @@
+---
+title: "Introduction to ggplot and the Tidyverse"
+format:
+  revealjs:
+    self-contained: true
+    theme: default
+    transition: fade
+    background-transition: fade
+    highlight-style: monokai
+    mainfont: Helvetica
+code-link: true
+execute:
+  echo: true
+  freeze: auto
+---
+
+## What is the tidyverse?
+
+::: columns
+::: {.column width="50%" style="text-align: center;"}
+- Collection of R packages for data science
+- Import, wrangle, program, model, and visualise your data
+- Built around the premise of 'tidy data'
+:::
+
+::: {.column width="50%" style="text-align: center;"}
+![](images/tidyverse.png)
+:::
+:::
+
+## What's 'tidy data'?
+
+::: columns
+::: {.column width="50%" style="text-align: center;"}
+- Each variable is a column
+- Each observation is a row
+- Each cell is a single measurement
+:::
+
+::: {.column width="50%" style="text-align: center;"}
+![](images/tidyData.png)
+:::
+:::
+
+## What's not 'tidy data'?
+
+![](images/untidyData.png)
+
+## What's ggplot?
+
+::: columns
+::: {.column width="50%" style="text-align: center;"}
+- The tidyverse's package for visualising data
+- Extensible and reproducible
+- Publication quality outputs
+:::
+
+::: {.column width="50%" style="text-align: center;"}
+![](images/ggplot2.png)
+:::
+:::
+
+## Examples
+![](images/plot1.png)
+
+## Examples
+![](images/plot2.png)
+
+## Examples
+![](images/plot3.gif)
+
+# Part 1: Visualising Module 1 flow data
+
+## Creating an R Studio project
+
+1) Open R Studio
+2) Go *File -> New Project -> New Directory -> New Project*
+3) *Directory name:* ENVT3362_workshop_2
+4) *Create project as a subdirectory of:* Wherever you store your ENVT3362 files!
+5) Click *Create project*
+5) Download the spreadsheet for this workshop [here](envFlowData.xls)
+6) Move this to your *ENVT3362_workshop_2* directory
+
+## Install the tidyverse
+
+```{r}
+#| echo: true
+#| eval: false
+install.packages("tidyverse")
+
+```
+
+## Load the necessary packages
+
+```{r}
+#| echo: true
+#| eval: true
+library(tidyverse)
+library(readxl)
+library(lubridate)
+```
+
+## Import the spreadsheet
+
+```{r}
+#| echo: true
+#| eval: true
+#| code-line-numbers: "5"
+library(tidyverse)
+library(readxl)
+library(lubridate)
+
+envFlow  <- read_xls(path = "envFlowData.xls", sheet = 1)
+```
+
+- The `path` argument is relative to you R Studio project file
+- `sheet` specifies which Excel sheet to read
+
+## Inspect the data
+
+```{r}
+#| echo: true
+#| eval: true
+#| code-line-numbers: "7"
+library(tidyverse)
+library(readxl)
+library(lubridate)
+
+envFlow  <- read_xls(path = "envFlowData.xls", sheet = 1)
+
+head(envFlow)
+```
+
+## Format the date
+```{r}
+#| echo: true
+#| eval: true
+#| output: false
+#| code-line-numbers: "9"
+library(tidyverse)
+library(readxl)
+library(lubridate)
+
+envFlow  <- read_xls(path = "envFlowData.xls", sheet = 1)
+
+head(envFlow)
+
+envFlow$date <- ymd(envFlow$date)
+```
+
+## Inspect the data again
+
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "11"
+library(tidyverse)
+library(readxl)
+library(lubridate)
+
+envFlow  <- read_xls(path = "envFlowData.xls", sheet = 1)
+
+head(envFlow)
+
+envFlow$date <- ymd(envFlow$date)
+
+head(envFlow)
+```
+
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "1"
+head(envFlow)
+```
+
+## Call `ggplot()`
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "1"
+ggplot()
+```
+
+## Call `ggplot()`
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "1"
+ggplot()
+```
+
+## Define the data and mapping
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "1"
+ggplot()
+```
+
+## Define the data and mapping
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "1"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge))
+```
+
+## Define the data and mapping
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "1"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge))
+```
+
+## Add a geometry layer
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "1"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge))
+```
+
+## Add a geometry layer
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "1"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+```
+
+## Add a geometry layer
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line()
+```
+
+## Add a geometry layer
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line()
+```
+
+## Change the geometry
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line()
+```
+
+## Change the geometry
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_point()
+```
+
+## Change the geometry
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "1"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_point()
+```
+
+## Change the colour
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line()
+```
+
+## Change the colour
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3")
+```
+
+- Use hexadecimal colour codes e.g. `"#0000FF"`
+- Or *reserved* colour words e.g. `"red"`, `"blue"`
+
+## Change the colour
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3")
+```
+
+## Fix the labels
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3")
+```
+
+## Fix the labels
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "3"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)")
+```
+
+## Fix the labels
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "3"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)")
+```
+
+## Change the theme
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "3"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)")
+```
+
+## Change the theme
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "4"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light()
+```
+
+- Try `theme_classic()`, `theme_minimal()`, `theme_dark()`
+
+## Change the theme
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "4"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light()
+```
+
+## Customise the theme
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "4"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light()
+```
+
+## Customise the theme
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "5-8"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Customise the theme
+
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "5-8"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Save the plot
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+ggsave(
+  filename = "discharge.pdf",
+  width = 2000,
+  height = 2000,
+  units = 'px'
+  )
+```
+
+## Read the documentation
+
+::: columns
+::: {.column width="50%" style="text-align: center;"}
+![](images/documentation1.png)
+:::
+
+::: {.column width="50%" style="text-align: center;"}
+![](images/documentation2.png)
+:::
+:::
+
+# Part 2: Visualising diversion scenarios
+
+## Desired output
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+ggplot() +
+  geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+  geom_rect(
+    mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, fill = "Diversion Scenario 1"),
+    alpha = 0.25
+  )+
+  scale_fill_manual(values = "red")+
+  labs(x = "Date", y = "Total Discharge (ML)") +
+  theme_light() +
+  theme(
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(colour = "black"),
+    legend.title = element_blank(),
+    legend.position = "top",
+    legend.justification = "right"
+  )
+```
+
+## Map the current aesthetics to `geom_line()`
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "1-2"
+ggplot(data = envFlow, mapping = aes(x = date, y = totalDischarge)) +
+    geom_line(colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Map the current aesthetics to `geom_line()`
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "1-2"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Map the current aesthetics to `geom_line()`
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "1-2"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Add a second geometry
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Add a second geometry
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "3-5"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550)
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Add a second geometry
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "3-5"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550)
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Customise the geometry
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "3-5"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550)
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Customise the geometry
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "5"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550),
+        alpha = 0.25
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Customise the geometry
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "3-5"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550),
+        alpha = 0.25
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Add a legend
+
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: "1"
+head(iris)
+```
+
+## Add a legend
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+ggplot()+
+    geom_point(
+        data=iris,
+        mapping=aes(x=Petal.Length, y=Petal.Width),
+        colour="dodgerblue3")+
+    theme_light()
+```
+
+## Add a legend
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: "4"
+ggplot()+
+    geom_point(
+        data=iris,
+        mapping=aes(x=Petal.Length, y=Petal.Width, colour=Species)
+        )+
+    theme_light()
+```
+
+## Add a legend
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550),
+        alpha = 0.25
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Add a legend
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "4"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, colour = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Add a legend
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "4"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, colour = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Customise the legend
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "4"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, colour = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Customise the legend
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "4"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, fill = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Customise the legend
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "4"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, fill = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black")
+    )
+```
+
+## Customise the legend
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "7,13"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, fill = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    scale_fill_manual(values = "red") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black"),
+        legend.title = element_blank()
+    )
+```
+
+## Customise the legend
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "4"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, fill = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    scale_fill_manual(values = "red") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black"),
+        legend.title = element_blank()
+    )
+```
+
+## Move the legend
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, fill = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    scale_fill_manual(values = "red") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black"),
+        legend.title = element_blank()
+    )
+```
+
+## Move the legend
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "14,15"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, fill = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    scale_fill_manual(values = "red") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black"),
+        legend.title = element_blank(),
+        legend.position = "top",
+        legend.justification = "right"
+    )
+```
+
+## Move the legend
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "14,15"
+ggplot() +
+    geom_line(data = envFlow, mapping = aes(x = date, y = totalDischarge), colour = "dodgerblue3") +
+    geom_rect(
+        mapping = aes(xmin=min(envFlow$date),xmax=max(envFlow$date), ymin=50, ymax=550, fill = "Diversion Scenario 1"),
+        alpha = 0.25
+        ) +
+    scale_fill_manual(values = "red") +
+    labs(x = "Date", y = "Total Discharge (ML)") +
+    theme_light() +
+    theme(
+        axis.title = element_text(face = "bold"),
+        axis.text = element_text(colour = "black"),
+        legend.title = element_blank(),
+        legend.position = "top",
+        legend.justification = "right"
+    )
+```
+
+## Save the plot
+
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+ggsave(
+    filename = "dischargeDiversion1.jpeg",
+    width = 297,
+    height = 210,
+    units = 'mm',
+    scale = 0.8,
+    dpi = 300
+    )
+```
+
+- `scale`	Multiplicative scaling factor.
+- `dpi`     Plot resolution. Applies only to raster output types.
+
+# Part 3: Barcharts and Pipes
+
+## Desired output
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+
+read_xls(path = "envFlowData.xls", sheet = 1) %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = year(date)) %>%
+  group_by(year) %>%
+  summarise(totalDischarge = sum(totalDischarge)) %>%
+  ggplot(mapping = aes(x = year, y = totalDischarge)) +
+  geom_bar(stat="identity", fill = "dodgerblue3") +
+  labs(x="Year", y = 'Total Discharge (ML)')+
+  theme_light() +
+  theme(
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(colour = "black")
+  )
+```
+
+## Reload the data
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+envFlow  <- read_xls(path = "envFlowData.xls", sheet = 1)
+
+head(envFlow)
+```
+
+## Introducing the pipe `%>%`
+- Pipes `%>%` take the output from one function/variable and makes it the input of the next
+
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: ""
+
+envFlow %>%
+  head()
+
+```
+
+## Format the date
+```{r}
+#| echo: true
+#| eval: true
+#| error: true
+#| warning: true
+#| output: false
+#| code-line-numbers: ""
+
+envFlow %>%
+  date <- ymd(date)
+
+```
+
+## Format the date with `mutate()`
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: ""
+
+envFlow %>%
+  mutate(date = ymd(date))
+
+```
+
+## Format the date with `mutate()`
+
+::: columns
+::: {.column width="50%" style="text-align: center;"}
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: ""
+
+envFlow %>%
+  mutate(date = ymd(date))
+
+```
+:::
+
+::: {.column width="50%" style="text-align: center;"}
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: ""
+
+envFlow$date <- ymd(envFlow$date)
+head(envFlow)
+
+```
+:::
+:::
+
+## Extract the years
+```{r}
+#| echo: false
+#| eval: true
+#| output: false
+envFlow  <- read_xls(path = "envFlowData.xls", sheet = 1)
+```
+
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: "3"
+
+envFlow %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = year(date))
+
+```
+
+
+## Pipes are non-destructive
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: "1"
+
+head(envFlow)
+
+```
+
+## Group and summarise
+
+```{r}
+#| echo: true
+#| eval: true
+#| output: true
+#| code-line-numbers: "4,5"
+
+envFlow %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = year(date)) %>%
+  group_by(year) %>%
+  summarise(totalDischarge = sum(totalDischarge))
+
+```
+
+## Plot using `geom_col()`
+
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "6,7"
+
+envFlow %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = year(date)) %>%
+  group_by(year) %>%
+  summarise(totalDischarge = sum(totalDischarge)) %>%
+  ggplot(mapping = aes(x = year, y = totalDischarge)) +
+  geom_col(fill = "dodgerblue3")
+```
+
+## Plot using `geom_col()`
+
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "6,7"
+
+envFlow %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = year(date)) %>%
+  group_by(year) %>%
+  summarise(totalDischarge = sum(totalDischarge)) %>%
+  ggplot(mapping = aes(x = year, y = totalDischarge)) +
+  geom_col(fill = "dodgerblue3")
+```
+
+## Apply the previous theme
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "8-13"
+
+envFlow %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = year(date)) %>%
+  group_by(year) %>%
+  summarise(totalDischarge = sum(totalDischarge)) %>%
+  ggplot(mapping = aes(x = year, y = totalDischarge)) +
+  geom_col(fill = "dodgerblue3") +
+  labs(x="Year", y = 'Total Discharge (ML)')+
+  theme_light() +
+  theme(
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(colour = "black")
+  )
+```
+
+## Apply the previous theme
+```{r}
+#| echo: false
+#| eval: true
+#| output: true
+#| code-line-numbers: "8-13"
+
+envFlow %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = year(date)) %>%
+  group_by(year) %>%
+  summarise(totalDischarge = sum(totalDischarge)) %>%
+  ggplot(mapping = aes(x = year, y = totalDischarge)) +
+  geom_col(fill = "dodgerblue3") +
+  labs(x="Year", y = 'Total Discharge (ML)')+
+  theme_light() +
+  theme(
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(colour = "black")
+  )
+```
+
+## Pipe the entire workflow
+
+```{r}
+#| echo: true
+#| eval: false
+#| output: false
+#| code-line-numbers: "|1|2-3|4-5|6-7|8-13"
+
+read_xls(path = "envFlowData.xls", sheet = 1) %>%
+  mutate(date = ymd(date)) %>%
+  mutate(year = year(date)) %>%
+  group_by(year) %>%
+  summarise(totalDischarge = sum(totalDischarge)) %>%
+  ggplot(mapping = aes(x = year, y = totalDischarge)) +
+  geom_col(fill = "dodgerblue3") +
+  labs(x="Year", y = 'Total Discharge (ML)')+
+  theme_light() +
+  theme(
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(colour = "black")
+  )
+```
